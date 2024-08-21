@@ -69,11 +69,11 @@
 
         </div>
 
-    </div>
+        </div>
 
-      <div v-else>
+        <div v-else>
         Loading...
-      </div>
+        </div>
 
     </div>
 
