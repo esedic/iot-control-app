@@ -37,13 +37,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr v-for="device in devices">
-                    <td><input type="checkbox" value="" /></td>
-                    <td>{{ device.deviceId }}</td>
-                    <td>{{ device.mac }}</td>
-                    <td>{{ device.lastSeen }}</td>
-                </tr>
-            </tbody>
+                    <tr v-for="device in devices">
+                        <td><input type="checkbox" value="" /></td>
+                        <td>{{ device.deviceId }}</td>
+                        <td>{{ device.mac }}</td>
+                        <td>{{ device.lastSeen }}</td>
+                    </tr>
+                </tbody>
             </table>
         
             <div class="mx-auto mt-5 mb-5 max-w-7xl">
