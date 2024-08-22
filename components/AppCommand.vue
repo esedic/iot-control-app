@@ -2,10 +2,15 @@
 
 // import { ref } from 'vue'
 
-// Clone properties element
+// Add / remove properties element
 const properties = ref([{ key: '', value: '' }])
+
 function addProperty() {
   properties.value.push({ key: '', value: '' })
+}
+
+function removeProperty(index) {
+  properties.value.splice(index, 1)
 }
 
 // Use the `useFetch` function to fetch data from the API
@@ -70,7 +75,8 @@ if (error.value) {
                                     />
                                 </div>
                                 <div>
-                                <UButton @click="addProperty" class="ml-4" icon="i-heroicons-plus" label="Add" />
+                                    <UButton @click="addProperty" class="ml-4" icon="i-heroicons-plus" label="Add" />
+                                    <UButton @click="removeProperty(index)" class="ml-3" icon="i-heroicons-minus-small" color="red" label="Remove" />
                                 </div>
                             </div>
                         </div>
