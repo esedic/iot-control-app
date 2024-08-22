@@ -10,7 +10,8 @@ export default defineNuxtConfig({
  },
   modules: [ 
     "@nuxt/ui", 
-    "nuxt-socket-io"],
+    "nuxt-socket-io"
+  ],
   io: {
       server: false,
       sockets: [ // Required
