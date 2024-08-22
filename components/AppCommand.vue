@@ -1,86 +1,85 @@
 <script setup>
-  // Use the `useFetch` function to fetch data from the API
-  const { data: devices, error } = await useFetch('http://localhost:8080/rest/status');
-  
-  // You can handle errors if needed
-  if (error.value) {
+
+// import { ref } from 'vue'
+
+// Clone properties element
+const properties = ref([{ key: '', value: '' }])
+function addProperty() {
+  properties.value.push({ key: '', value: '' })
+}
+
+// Use the `useFetch` function to fetch data from the API
+const { data: devices, error } = await useFetch('http://localhost:8080/rest/status');
+
+// Protocol dropdown select 
+const selected = ref([devices[1]]);
+
+const sort = ref({
+    column: 'deviceId',
+    direction: 'desc'
+})
+
+// You can handle errors if needed
+if (error.value) {
     console.error('An error occurred while fetching data:', error.value);
-  }
-  </script>
-  
-  <template>
-
+}
+</script>
+<template>
     <div class="mx-auto mb-5 px-4 sm:px-6 lg:px-8 max-w-7xl">
-
         <!-- Check for error -->
         <div v-if="error">
-        <p>Error: {{ error.message }}</p>
+            <p>Error: {{ error.message }}</p>
         </div>
-
-        <div v-if="devices">
-
+        <div v-else-if="devices">
+            <!-- Protocol dropdown select -->
             <div class="select-command-container mb-4">
-                <select class="select-command-element form-select">
-                    <option value="--">Select command</option>
-                    <option value="1">Send HTTP</option>
-                    <option value="2">Send MQTT</option>
-                </select>
+                <USelect size="sm" placeholder="Select command..." :options="['Send HTTP', 'Send MQTT']" />
             </div>
-
-            <table class="command-list-table border-collapse border border-slate-400 w-full">
-                <thead>
-                    <tr>
-                        <th class="border border-slate-300">&nbsp;</th>
-                        <th class="border border-slate-300">Device ID</th>
-                        <th class="border border-slate-300">MAC</th>
-                        <th class="border border-slate-300">Last Seen</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="device in devices">
-                        <td><input type="checkbox" value="" /></td>
-                        <td>{{ device.deviceId }}</td>
-                        <td>{{ device.mac }}</td>
-                        <td>{{ device.lastSeen }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        
+            <!-- Table with devices -->
+            <UTable :sort="sort" v-model="selected" :rows="devices" />
+            <!-- Form with additional data -->
             <div class="mx-auto mt-5 mb-5 max-w-7xl">
-
                 <div class="form-container">
                     <div class="topic-container mb-4">
-                        <label for="topic">Topic:
-                            <input type="text" name="topic" class="w-full max-w-xs rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <label class="text-sm font-medium text-gray-700 dark:text-gray-200" for="topic">Topic:
+                            <UInput name="topic" />
                         </label>
                     </div>
                     <div class="retain-container mb-4">
-                        <label for="retain">Retain:
-                            <input type="checkbox" class="" name="retain" value="" />
+                        <label for="retain">
+                            <UCheckbox name="retain" label="Retain" />
                         </label>
                     </div>
                     <div class="properties-element mb-4">
                         <p>Properties:</p>
-                        <div class="properties-container w-full flex flex-justify-center">
-                            <div class="property-container flex flex-ju w-1/2">
-                                <input type="text" name="property-key" class="w-full max-w-xs rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" /> : 
-                                <input type="text" name="property-value" class="w-full max-w-xs rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                            <div class="property-add-container ml-2">
-                                <button class="">Add</button>
+                        <div class="properties-container w-full">
+                            <div v-for="(property, index) in properties" :key="index" class="property-container flex mb-4">
+                                <div>
+                                    <UInput 
+                                        v-model="property.key"
+                                        :name="'propertyKey' + index" 
+                                        placeholder="Property Key" 
+                                        class="mr-4" 
+                                    />
+                                </div>
+                                <div>
+                                    <UInput 
+                                        v-model="property.value"
+                                        :name="'propertyValue' + index" 
+                                        placeholder="Property Value" 
+                                    />
+                                </div>
+                                <div>
+                                <UButton @click="addProperty" class="ml-4" icon="i-heroicons-plus" label="Add" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
         <div v-else>
-        Loading...
+            Loading...
         </div>
-
     </div>
-
-  </template>
+</template>
