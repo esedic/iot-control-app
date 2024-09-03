@@ -7,7 +7,7 @@
         <div>
           Copyright © 2024 All rights reserved
         </div>
-        <div>This is name</div>
+        <div>IOT Control app</div>
       </div>
     </footer>
 </UContainer>

@@ -8,8 +8,5 @@ export default defineNuxtConfig({
       websocket: true
     },
  },
-  modules: [ 
-    "@nuxt/ui", 
-    "nuxt-socket-io"
-  ]
+  modules: ["@nuxt/ui", "nuxt-socket-io", "dayjs-nuxt"]
 })
