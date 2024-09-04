@@ -1,6 +1,8 @@
 # IOT CONTROL WEB APP
 
-Nuxt web app [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Nuxt web app
+
+[Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
 ## Setup
 
