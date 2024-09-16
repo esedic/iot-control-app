@@ -1,74 +1,3 @@
-<script setup>
-
-// import { ref } from 'vue'
-// import { useFetch } from '#app';
-import { useDayjs } from '#dayjs' // not need if you are using auto import
-const dayjs = useDayjs()
-
-// Add / remove properties element
-const properties = ref([{ key: '', value: '' }])
-
-function addProperty() {
-  properties.value.push({ key: '', value: '' })
-}
-
-function removeProperty(index) {
-  properties.value.splice(index, 1)
-}
-
-// Use the `useFetch` function to fetch data from the API
-const { data: devices, error } = await useFetch('http://localhost:8080/rest/status');
-
-// Define select options for protocol dropdown
-const selectProtocol = [
-  { label: 'Send HTTP', value: 'http' },
-  { label: 'Send MQTT', value: 'mqtt' }
-]
-// Create a reactive state for protocol dropdown
-const selectedOption = ref('')
-
-// Table with devices list
-const devicesList = ref([devices[1]])
-
-// Format date
-const formattedData = computed(() => {
-  return devices.value?.map(device => ({
-    ...device,
-    lastSeen: dayjs(device.lastSeen).format('DD.MM.YYYY HH:mm:ss')
-  })) || [];
-}); 
-
-// Default sort
-const sort = ref({
-    column: 'deviceId',
-    direction: 'desc'
-})
-
-/* this.socket = this.$nuxtSocket({
-  name: 'iotControl',
-  channel: '/ws/status',
-  autoConnect: true,
-  handleError: (error) => {
-    console.log('WS error:', error)
-  },
-  handleConnect: () => {
-    console.log('Connected to the WS server')
-  },
-}) */
-
-// Error handling
-if (error.value) {
-    console.error('An error occurred while fetching data:', error.value);
-}
-
-// Log formatted data for debugging
-watch(formattedData, (newData) => {
-    console.log('Formatted Data:', newData);
-});
-
-
-
-</script>
 <template>
     <div class="mx-auto mb-5 px-4 sm:px-6 lg:px-8 max-w-7xl">
         <!-- Check for error -->
@@ -141,3 +70,81 @@ watch(formattedData, (newData) => {
         </div>
     </div>
 </template>
+
+<script setup>
+
+// import { ref } from 'vue'
+import { onMounted } from 'vue';
+// import { useFetch } from '#app';
+import { useDayjs } from '#dayjs' // not need if you are using auto import
+const dayjs = useDayjs()
+
+// Add / remove properties element
+const properties = ref([{ key: '', value: '' }])
+
+function addProperty() {
+  properties.value.push({ key: '', value: '' })
+}
+
+function removeProperty(index) {
+  properties.value.splice(index, 1)
+}
+
+// Use the `useFetch` function to fetch data from the API
+const { data: devices, error } = await useFetch('http://localhost:8080/rest/status');
+
+// Define select options for protocol dropdown
+const selectProtocol = [
+  { label: 'Send HTTP', value: 'http' },
+  { label: 'Send MQTT', value: 'mqtt' }
+]
+// Create a reactive state for protocol dropdown
+const selectedOption = ref('')
+
+// Table with devices list
+const devicesList = ref([devices[1]])
+
+// Format date
+const formattedData = computed(() => {
+  return devices.value?.map(device => ({
+    ...device,
+    lastSeen: dayjs(device.lastSeen).format('DD.MM.YYYY HH:mm:ss')
+  })) || [];
+});
+
+// Default sort
+const sort = ref({
+    column: 'deviceId',
+    direction: 'desc'
+})
+
+onMounted(() => {
+    // Ensure $nuxtSocket is available after the component is mounted
+  const socket = useNuxtApp().$nuxtSocket({  name: 'iotControl' });
+  console.log(socket);
+  if (socket) {
+    console.log('socket is available');
+        // Now you can use your socket
+        socket.on('newMessage', (msg) => {
+        //message.value = msg;  // Update the message when a new one arrives
+        console.log('Recevied message: ' + msg);
+     });
+  } else {
+    console.error('$nuxtSocket is undefined!');
+  }
+});
+
+
+// Error handling
+if (error.value) {
+    console.error('An error occurred while fetching data:', error.value);
+}
+
+// Log formatted data for debugging
+watch(formattedData, (newData) => {
+    console.log('Formatted Data:', newData);
+});
+
+
+
+</script>

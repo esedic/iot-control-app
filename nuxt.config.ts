@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   sockets: [
     {
       name: 'iotControl',  // Optional, the default name for this socket
-      url: 'http://localhost:8080',  // Replace with your WebSocket server URL
+      url: 'http://localhost:8080/ws/status',  // Replace with your WebSocket server URL
       default: true,  // Automatically used as default socket connection
       namespaces: {},  // Optional, specify different namespaces
       // Options specific to socket.io-client
@@ -33,6 +33,19 @@ export default defineNuxtConfig({
     },
     // You can add more socket connections if needed
   ],
+  server: {
+    /* CORS options */ 
+    cors: { 
+      credentials: true,
+      origin: [
+        // whitelisted origins 
+        'http://localhost:8080',
+        'http://192.168.79.110:8080',
+        '192.168.79.110:8080'
+      ],
+      methods: ["GET", "POST"]
+    }
+  }
 },
 
 })
