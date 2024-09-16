@@ -44,6 +44,18 @@ const sort = ref({
     direction: 'desc'
 })
 
+/* this.socket = this.$nuxtSocket({
+  name: 'iotControl',
+  channel: '/ws/status',
+  autoConnect: true,
+  handleError: (error) => {
+    console.log('WS error:', error)
+  },
+  handleConnect: () => {
+    console.log('Connected to the WS server')
+  },
+}) */
+
 // Error handling
 if (error.value) {
     console.error('An error occurred while fetching data:', error.value);
@@ -53,6 +65,8 @@ if (error.value) {
 watch(formattedData, (newData) => {
     console.log('Formatted Data:', newData);
 });
+
+
 
 </script>
 <template>
